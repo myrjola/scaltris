@@ -14,7 +14,7 @@ import scala.swing.Graphics2D
   */
 object Block extends Enumeration {
   type Block = Value
-  val T, S, Z, O, I, L, J = Value
+  val T, S, Z, O, I, L, J, EMPTY = Value
 
   private val BlockSize = 32
   private val spriteSheetPath = "data/tetblocks.png"
@@ -58,6 +58,7 @@ object Block extends Enumeration {
     case I => Color.magenta
     case L => Color.orange
     case J => Color.lightGray
+    case EMPTY => Color.black
   }
 
 
