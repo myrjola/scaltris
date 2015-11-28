@@ -31,8 +31,8 @@ class Board(var board: Array[Array[Block.Value]]) {
     }
   }
 
-  private def legalX = (0 to Board.Width)
-  private def legalY = (0 to Board.Height)
+  private def legalX = (0 until Board.Width)
+  private def legalY = (0 until Board.Height)
 
   def isLegal(tetromino: Tetromino): Boolean = {
     val positions = tetromino.getBlockPositions

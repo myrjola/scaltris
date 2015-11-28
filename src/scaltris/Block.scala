@@ -16,7 +16,7 @@ object Block extends Enumeration {
   type Block = Value
   val T, S, Z, O, I, L, J, EMPTY = Value
 
-  private val BlockSize = 32
+  val BlockSize = 32
   private val spriteSheetPath = "data/tetblocks.png"
   private val spriteMap = if (Files.exists(Paths.get(spriteSheetPath))) {
     val spriteSheet = ImageIO.read(new File(spriteSheetPath))
