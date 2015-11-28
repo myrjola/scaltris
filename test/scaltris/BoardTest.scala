@@ -55,4 +55,20 @@ class BoardTest extends FlatSpec with Matchers {
         Array.fill[Array[Block.Value]](Board.Height-4)(Board.EmptyBoardRow)
     )
   }
+
+  it should "notice illegal tetrominos" in {
+    val b = fixture.board
+    val l = new Tetromino(Block.L)
+    b.isLegal(l) should be (true)
+    b.withTetromino(l).isLegal(l) should be (false)
+    b.isLegal(l.withMoveLeft.withMoveLeft.withMoveLeft.withMoveLeft.withMoveLeft) should be (false)
+    b.isLegal(l.withMoveRight.withMoveRight.withMoveRight.withMoveRight.withMoveRight) should be (false)
+    b.isLegal(
+      l.withMoveDown.withMoveDown.withMoveDown.withMoveDown.withMoveDown
+        .withMoveDown.withMoveDown.withMoveDown.withMoveDown.withMoveDown
+        .withMoveDown.withMoveDown.withMoveDown.withMoveDown.withMoveDown
+        .withMoveDown.withMoveDown.withMoveDown.withMoveDown.withMoveDown
+        .withMoveDown.withMoveDown.withMoveDown.withMoveDown.withMoveDown
+    ) should be (false)
+  }
 }

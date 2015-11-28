@@ -31,6 +31,16 @@ class Board(var board: Array[Array[Block.Value]]) {
     }
   }
 
+  private def legalX = (0 to Board.Width)
+  private def legalY = (0 to Board.Height)
+
+  def isLegal(tetromino: Tetromino): Boolean = {
+    val positions = tetromino.getBlockPositions
+    positions.forall {
+      position => legalX.contains(position._1) && legalY.contains(position._2)
+    } && !overlap(tetromino)
+  }
+
   def clearFullRows: Int = {
     val clearedBoard = board.filter(_.contains(Block.EMPTY))
     val clearedRows = Board.Height - clearedBoard.size
