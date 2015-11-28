@@ -26,7 +26,7 @@ class Board(var board: Array[Array[Block.Value]]) {
 
   def overlap(tetromino: Tetromino): Boolean = {
     val positions = tetromino.getBlockPositions
-    positions.forall {
+    !positions.forall {
       position => board(position._2)(position._1).equals(Block.EMPTY)
     }
   }

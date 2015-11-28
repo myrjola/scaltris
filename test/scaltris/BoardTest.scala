@@ -9,8 +9,7 @@ class BoardTest extends FlatSpec with Matchers {
     }
 
   it should "start with an empty board" in {
-
-    fixture.board.board.forall(_.forall(_.equals(Block.EMPTY)))
+    fixture.board.board.forall(_.forall(_.equals(Block.EMPTY))) should be (true)
   }
 
   it should "place a tetromino" in {
@@ -23,6 +22,13 @@ class BoardTest extends FlatSpec with Matchers {
               Block.L, Block.L, Block.EMPTY, Block.EMPTY, Block.EMPTY)) ++
         Array.fill[Array[Block.Value]](Board.Height-2)(Board.EmptyBoardRow)
     )
+  }
+
+  it should "notice overlaps" in {
+    val b = fixture.board
+    val l = new Tetromino(Block.L)
+    b.overlap(l) should be (false)
+    b.withTetromino(l).overlap(l) should be (true)
   }
 
   it should "clear full rows in board" in {
