@@ -3,24 +3,40 @@ package scaltris
 object Board {
   val Width = 10
   val Height = 24
+  val EmptyBoardRow = Array.fill[Block.Value](Width)(Block.EMPTY)
 
   def emptyBoard: Array[Array[Block.Value]] = {
-    val emptyBoardRow = Array.fill[Block.Value](Width)(Block.EMPTY)
-    Array.fill[Array[Block.Value]](Height)(emptyBoardRow)
+    Array.fill[Array[Block.Value]](Height)(EmptyBoardRow)
   }
 }
 
-class Board {
-  private var board: Array[Array[Block.Value]] = Board.emptyBoard
+class Board(var board: Array[Array[Block.Value]]) {
 
-  def withTetromino(tetromino: Tetromino): Array[Array[Block.Value]] = {
-    val boardCopy = cloneBoard
+  def this() = this(Board.emptyBoard)
+
+  def withTetromino(tetromino: Tetromino): Board = {
+    val boardCopy = clone
     val positions = tetromino.getBlockPositions
     positions.foreach {
-      position => boardCopy(position._2)(position._1) = tetromino.block
+      position => boardCopy.board(position._2)(position._1) = tetromino.block
     }
+
     boardCopy
   }
 
-  def cloneBoard: Array[Array[Block.Value]] = board.map(_.clone)
+  def overlap(tetromino: Tetromino): Boolean = {
+    val positions = tetromino.getBlockPositions
+    positions.forall {
+      position => board(position._2)(position._1).equals(Block.EMPTY)
+    }
+  }
+
+  def clearFullRows: Int = {
+    val clearedBoard = board.filter(_.contains(Block.EMPTY))
+    val clearedRows = Board.Height - clearedBoard.size
+    board = Array.fill[Array[Block.Value]](clearedRows)(Board.EmptyBoardRow) ++ clearedBoard
+    clearedRows
+  }
+
+  override def clone: Board = new Board(board.map(_.clone))
 }

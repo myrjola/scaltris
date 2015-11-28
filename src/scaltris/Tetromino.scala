@@ -9,5 +9,4 @@ class Tetromino(val block: Block.Value) {
       blockPosition => (blockPosition._1 + position._1, blockPosition._2 + position._2)
     }
   }
-
 }
