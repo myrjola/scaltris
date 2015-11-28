@@ -11,8 +11,10 @@ object Scaltris extends SimpleSwingApplication {
     title = "Scaltris"
 
     preferredSize = new Dimension(Block.BlockSize * Board.Width,
-                                  Block.BlockSize * Board.Height)
+                                  Block.BlockSize * Board.Height + 15)
 
     contents = boardPanel
+
+    boardPanel.requestFocus
   }
 }

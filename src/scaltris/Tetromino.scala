@@ -1,8 +1,19 @@
 package scaltris
 
+import scala.util.Random
+
+
 class Tetromino(val block: Block.Value,
                 var position: Tuple2[Int, Int] = (Board.Width / 2, 1),
                 var orientation: Int = 0) {
+
+  /**
+    * Return a random Tetromino
+    */
+  def this() = {
+    // The -1 is to exclude the EMPTY block.
+    this(Block.apply(Random.nextInt(Block.values.size - 1)))
+  }
 
   def getBlockPositions: Array[(Int, Int)] = {
     Block.getPositions(block)(orientation).map {
