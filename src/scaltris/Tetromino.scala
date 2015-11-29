@@ -2,7 +2,6 @@ package scaltris
 
 import scala.util.Random
 
-
 class Tetromino(val block: Block.Value,
                 var position: Tuple2[Int, Int] = (Board.Width / 2, 1),
                 var orientation: Int = 0) {

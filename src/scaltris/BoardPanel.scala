@@ -7,7 +7,6 @@ import scala.swing.Graphics2D
 import scala.swing.Panel
 
 class BoardPanel extends Panel {
-
   val controller = new BoardController(this)
   controller.listenTo(this.keys)
 

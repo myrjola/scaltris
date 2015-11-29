@@ -12,7 +12,12 @@ class BoardController(val parent: BoardPanel) extends Reactor {
   var board = new Board
   var currentTetromino = new Tetromino
 
-  def tryMove(tetromino: Tetromino) = {
+  private val gameOverAnimation = new GameOverAnimation(this)
+
+  private var gameRunning = true
+
+  def tryMove(tetromino: Tetromino): Unit = {
+    if (!gameRunning) return
     if (board.isLegal(tetromino)) {
       currentTetromino = tetromino
     }
@@ -20,6 +25,7 @@ class BoardController(val parent: BoardPanel) extends Reactor {
   }
 
   def dropTetromino() {
+    if (!gameRunning) return
     while (board.isLegal(currentTetromino.withMoveDown)) {
       currentTetromino = currentTetromino.withMoveDown
     }
@@ -42,28 +48,48 @@ class BoardController(val parent: BoardPanel) extends Reactor {
     case KeyPressed(_, Key.Right, _, _) => tryMove(currentTetromino.withMoveRight)
 
     case KeyPressed(_, Key.Up, _, _) => tryMove(currentTetromino.withRotation)
+
+    case KeyPressed(_, Key.P, _, _) => togglePause
   }
 
-  new Timer(250, new ActionListener {
-              override def actionPerformed(e: ActionEvent) {
-                val newTetromino = currentTetromino.withMoveDown
-                if (board.isLegal(newTetromino)) {
-                  currentTetromino = newTetromino
+  val gameLoop = new ActionListener {
+    override def actionPerformed(e: ActionEvent) {
+      val newTetromino = currentTetromino.withMoveDown
+      if (board.isLegal(newTetromino)) {
+        currentTetromino = newTetromino
 
-                } else {
-                  placeTetromino
-                  if (!board.isLegal(currentTetromino)) {
-                    // Game over
-                    board.board.reverse.foreach {
-                      row => row.indices.foreach {
-                        i => row(i) = Block.nextBlock
-                      }
-                      parent.repaint
-                      Thread.sleep(50)
-                    }
-                  }
-                }
-                parent.repaint
-              }
-            }).start
+      } else {
+        placeTetromino
+        if (!board.isLegal(currentTetromino)) {
+          gameOverAnimation.restart
+          pauseGame
+        }
+      }
+      parent.repaint
+    }
+  }
+
+  def pauseGame = {
+    gameRunning = false
+    tetrisTick.stop
+  }
+
+  def resumeGame = {
+    gameRunning = true
+    tetrisTick.start
+  }
+
+  def togglePause = {
+    if (gameRunning) {
+      pauseGame
+    } else {
+      resumeGame
+    }
+  }
+
+  def repaint = parent.repaint
+
+  val tetrisTick: Timer = new Timer(250, gameLoop)
+
+  tetrisTick.start
 }
