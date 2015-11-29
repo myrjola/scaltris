@@ -14,7 +14,7 @@ class BoardController(val parent: BoardPanel) extends Reactor {
 
   private val gameOverAnimation = new GameOverAnimation(this)
 
-  private var gameRunning = true
+  var gameRunning = true
 
   def tryMove(tetromino: Tetromino): Unit = {
     if (!gameRunning) return

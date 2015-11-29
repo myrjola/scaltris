@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import javax.swing.Timer
 
-
 /**
   * Classic Tetris game over animation
   */
@@ -13,6 +12,10 @@ class GameOverAnimation(val parent: BoardController) {
 
   val gameOverLoop = new ActionListener {
     override def actionPerformed(e: ActionEvent) {
+      if (parent.gameRunning) {
+        animationTimer.stop
+        return
+      }
       val row = parent.board.board(rowIndex)
       row.indices.foreach {
         i => row(i) = Block.nextBlock

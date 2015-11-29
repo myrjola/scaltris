@@ -24,12 +24,20 @@ object Block extends Enumeration {
   def nextBlock: Block = Block.apply(Random.nextInt(Block.values.size - 1))
 
   val BlockSize = 32
-  private val spriteSheetPath = "data/tetblocks.png"
-  private val spriteMap = if (Files.exists(Paths.get(spriteSheetPath))) {
+  private val spriteSheetPath = "img/tetblocks.png"
+  private val spriteMap: HashMap[Block.Value, BufferedImage] =
+    if (Files.exists(Paths.get(spriteSheetPath))) {
     val spriteSheet = ImageIO.read(new File(spriteSheetPath))
     HashMap(
       Block.values.toSeq.zipWithIndex.map {
-        b => b._1 -> spriteSheet.getSubimage(b._2 * BlockSize, 0, BlockSize, BlockSize)
+        b => b._1 -> {
+          val x = b._2 * BlockSize
+          if (x + BlockSize > spriteSheet.getWidth) {
+            getBlockFallbackImage(b._1)
+          } else {
+            spriteSheet.getSubimage(x, 0, BlockSize, BlockSize)
+          }
+        }
       }: _*
     )
   } else {
