@@ -8,6 +8,7 @@ import javax.imageio.ImageIO
 import java.io.File
 import scala.collection.mutable.HashMap
 import scala.swing.Graphics2D
+import scala.util.Random
 
 /**
   * Block types and related information.
@@ -15,6 +16,12 @@ import scala.swing.Graphics2D
 object Block extends Enumeration {
   type Block = Value
   val T, S, Z, O, I, L, J, EMPTY = Value
+
+
+  /**
+    * @return a random Block that is not EMPTY
+    */
+  def nextBlock: Block = Block.apply(Random.nextInt(Block.values.size - 1))
 
   val BlockSize = 32
   private val spriteSheetPath = "data/tetblocks.png"

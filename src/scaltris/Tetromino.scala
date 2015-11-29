@@ -11,8 +11,7 @@ class Tetromino(val block: Block.Value,
     * Return a random Tetromino
     */
   def this() = {
-    // The -1 is to exclude the EMPTY block.
-    this(Block.apply(Random.nextInt(Block.values.size - 1)))
+    this(Block.nextBlock)
   }
 
   def getBlockPositions: Array[(Int, Int)] = {

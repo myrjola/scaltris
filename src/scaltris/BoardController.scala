@@ -13,17 +13,29 @@ class BoardController(val parent: BoardPanel) extends Reactor {
   var currentTetromino = new Tetromino
 
   def tryMove(tetromino: Tetromino) = {
-    print("moving")
     if (board.isLegal(tetromino)) {
       currentTetromino = tetromino
     }
     parent.repaint
   }
 
+  def dropTetromino() {
+    while (board.isLegal(currentTetromino.withMoveDown)) {
+      currentTetromino = currentTetromino.withMoveDown
+    }
+    placeTetromino
+  }
+
+  def placeTetromino() {
+    board = board.withTetromino(currentTetromino)
+    board.clearFullRows
+    currentTetromino = new Tetromino
+  }
+
   reactions += {
     case KeyPressed(_, Key.Down, _, _) => tryMove(currentTetromino.withMoveDown)
 
-    case KeyPressed(_, Key.Space, _, _) => ???
+    case KeyPressed(_, Key.Space, _, _) => dropTetromino
 
     case KeyPressed(_, Key.Left, _, _) => tryMove(currentTetromino.withMoveLeft)
 
@@ -34,15 +46,22 @@ class BoardController(val parent: BoardPanel) extends Reactor {
 
   new Timer(250, new ActionListener {
               override def actionPerformed(e: ActionEvent) {
-                println("timer")
                 val newTetromino = currentTetromino.withMoveDown
                 if (board.isLegal(newTetromino)) {
                   currentTetromino = newTetromino
 
                 } else {
-                  board = board.withTetromino(currentTetromino)
-                  board.clearFullRows
-                  currentTetromino = new Tetromino
+                  placeTetromino
+                  if (!board.isLegal(currentTetromino)) {
+                    // Game over
+                    board.board.reverse.foreach {
+                      row => row.indices.foreach {
+                        i => row(i) = Block.nextBlock
+                      }
+                      parent.repaint
+                      Thread.sleep(50)
+                    }
+                  }
                 }
                 parent.repaint
               }
