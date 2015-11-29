@@ -17,7 +17,6 @@ object Block extends Enumeration {
   type Block = Value
   val T, S, Z, O, I, L, J, EMPTY = Value
 
-
   /**
     * @return a random Block that is not EMPTY
     */
@@ -43,7 +42,6 @@ object Block extends Enumeration {
   } else {
     new HashMap[Block, BufferedImage]
   }
-
 
   def getBlockImage(block: Block): BufferedImage = {
     val maybeImage = spriteMap.get(block)

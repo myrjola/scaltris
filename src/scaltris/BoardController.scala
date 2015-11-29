@@ -24,15 +24,21 @@ class BoardController(val parent: BoardPanel) extends Reactor {
     parent.repaint
   }
 
-  def dropTetromino() {
-    if (!gameRunning) return
-    while (board.isLegal(currentTetromino.withMoveDown)) {
-      currentTetromino = currentTetromino.withMoveDown
+  def droppedTetromino: Tetromino = {
+    var tetromino = currentTetromino
+    while (board.isLegal(tetromino.withMoveDown)) {
+      tetromino = tetromino.withMoveDown
     }
+    tetromino
+  }
+
+  def dropTetromino: Unit = {
+    if (!gameRunning) return
+    currentTetromino = droppedTetromino
     placeTetromino
   }
 
-  def placeTetromino() {
+  def placeTetromino: Unit = {
     board = board.withTetromino(currentTetromino)
     board.clearFullRows
     currentTetromino = new Tetromino
