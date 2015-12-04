@@ -12,9 +12,15 @@ class BoardController(val parent: BoardPanel) extends Reactor {
   var board = new Board
   var currentTetromino = new Tetromino
 
+  val StartTickInterval = 600
+
+  var score = 0
+
   private val gameOverAnimation = new GameOverAnimation(this)
 
   var gameRunning = true
+
+  def getTickInterval(score: Int): Int = StartTickInterval / (Math.sqrt(score/5).toInt + 1)
 
   def tryMove(tetromino: Tetromino): Unit = {
     if (!gameRunning) return
@@ -40,7 +46,8 @@ class BoardController(val parent: BoardPanel) extends Reactor {
 
   def placeTetromino: Unit = {
     board = board.withTetromino(currentTetromino)
-    board.clearFullRows
+    score += board.clearFullRows
+    tetrisTick.setDelay(getTickInterval(score))
     currentTetromino = new Tetromino
   }
 
@@ -56,6 +63,8 @@ class BoardController(val parent: BoardPanel) extends Reactor {
     case KeyPressed(_, Key.Up, _, _) => tryMove(currentTetromino.withRotation)
 
     case KeyPressed(_, Key.P, _, _) => togglePause
+
+    case KeyPressed(_, Key.N, _, _) => newGame
   }
 
   val gameLoop = new ActionListener {
@@ -75,14 +84,21 @@ class BoardController(val parent: BoardPanel) extends Reactor {
     }
   }
 
-  def pauseGame = {
+  def pauseGame: Unit = {
     gameRunning = false
     tetrisTick.stop
   }
 
-  def resumeGame = {
+  def resumeGame: Unit = {
     gameRunning = true
     tetrisTick.start
+  }
+
+  def newGame: Unit = {
+    placeTetromino
+    board = new Board
+    score = 0
+    resumeGame
   }
 
   def togglePause = {
@@ -95,7 +111,7 @@ class BoardController(val parent: BoardPanel) extends Reactor {
 
   def repaint = parent.repaint
 
-  val tetrisTick: Timer = new Timer(250, gameLoop)
+  val tetrisTick: Timer = new Timer(getTickInterval(score), gameLoop)
 
   tetrisTick.start
 }
