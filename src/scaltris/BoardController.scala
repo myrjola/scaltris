@@ -47,10 +47,14 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
 
   def placeTetromino: Unit = {
     board = board.withTetromino(currentTetromino)
-    score += board.clearFullRows
-    tetrisTick.setDelay(getTickInterval(score))
+    setScore(score + board.clearFullRows)
     currentTetromino = nextTetromino
     nextTetromino = new Tetromino
+  }
+
+  private def setScore(newScore: Int): Unit = {
+    score = newScore
+    tetrisTick.setDelay(getTickInterval(score))
   }
 
   reactions += {
@@ -99,7 +103,7 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
   def newGame: Unit = {
     placeTetromino
     board = new Board
-    score = 0
+    setScore(0)
     resumeGame
   }
 
