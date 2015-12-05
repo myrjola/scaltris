@@ -34,7 +34,7 @@ class TetrisPanel extends Panel {
     }
 
     // Draw board with current tetromino
-    controller.board.withTetromino(controller.currentTetromino).board.zipWithIndex.foreach{
+    controller.board.withTetromino(controller.currentTetromino).board.zipWithIndex.foreach {
       case(row, y) => row.zipWithIndex.foreach {
         case(block, x) =>
           if (block != Block.EMPTY) {
@@ -43,5 +43,17 @@ class TetrisPanel extends Panel {
           }
       }
     }
+
+    // Draw next tetromino
+    g.drawString("Next tetromino:", (Board.Width + 1) * Block.BlockSize, Block.BlockSize / 2)
+    val nextTetromino = controller.nextTetromino
+    nextTetromino.getBlockPositions.foreach {
+      case(x, y) =>
+        val img = Block.getBlockImage(nextTetromino.block)
+        g.drawImage(img, null, (Board.Width / 2 + 2 + x) * Block.BlockSize, (y + 1) * Block.BlockSize)
+    }
+
+    // Draw score
+    g.drawString("Score: %d".format(controller.score), (Board.Width + 1) * Block.BlockSize, Block.BlockSize * 6)
   }
 }

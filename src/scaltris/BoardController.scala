@@ -11,6 +11,7 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
 
   var board = new Board
   var currentTetromino = new Tetromino
+  var nextTetromino = new Tetromino
 
   val StartTickInterval = 600
 
@@ -48,7 +49,8 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
     board = board.withTetromino(currentTetromino)
     score += board.clearFullRows
     tetrisTick.setDelay(getTickInterval(score))
-    currentTetromino = new Tetromino
+    currentTetromino = nextTetromino
+    nextTetromino = new Tetromino
   }
 
   reactions += {
