@@ -20,6 +20,7 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
   private val gameOverAnimation = new GameOverAnimation(this)
 
   var gameRunning = true
+  var gameOver = false
 
   def getTickInterval(score: Int): Int = StartTickInterval / (Math.sqrt(score/5).toInt + 1)
 
@@ -82,6 +83,7 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
       } else {
         placeTetromino
         if (!board.isLegal(currentTetromino)) {
+          gameOver = true
           gameOverAnimation.restart
           pauseGame
         }
@@ -96,14 +98,17 @@ class BoardController(val parent: TetrisPanel) extends Reactor {
   }
 
   def resumeGame: Unit = {
-    gameRunning = true
-    tetrisTick.start
+    if (!gameOver) {
+      gameRunning = true
+      tetrisTick.start
+    }
   }
 
   def newGame: Unit = {
     placeTetromino
     board = new Board
     setScore(0)
+    gameOver = false
     resumeGame
   }
 
