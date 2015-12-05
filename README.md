@@ -5,6 +5,8 @@
 It borrows some sprites and design from my earlier Tetris clone implemented in C
 [martet](https://github.com/myrjola/margames).
 
+![Screenshot of Scaltris](screenshot.png)
+
 ## Running
 
 I developed the project with SBT http://www.scala-sbt.org/. To run the application:
