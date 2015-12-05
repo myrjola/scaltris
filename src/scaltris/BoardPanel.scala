@@ -5,12 +5,16 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.image.RescaleOp
 import javax.swing.Timer
+import scala.swing.Dimension
 import scala.swing.Graphics2D
 import scala.swing.Panel
 
 class BoardPanel extends Panel {
   val controller = new BoardController(this)
   controller.listenTo(this.keys)
+
+  preferredSize = new Dimension(Block.BlockSize * Board.Width,
+                                Block.BlockSize * Board.Height)
 
   override def paintComponent(g: Graphics2D) {
     super.paintComponent(g)

@@ -15,9 +15,6 @@ object Scaltris extends SimpleSwingApplication {
   def top = new MainFrame {
     title = "Scaltris"
 
-    preferredSize = new Dimension(Block.BlockSize * Board.Width,
-                                  Block.BlockSize * Board.Height + 20)
-
     contents = boardPanel
 
     menuBar = new MenuBar {
@@ -28,6 +25,8 @@ object Scaltris extends SimpleSwingApplication {
         contents += new MenuItem(Action("Exit") { sys.exit(0) })
       }
     }
+
+    pack
 
     boardPanel.requestFocus
   }
