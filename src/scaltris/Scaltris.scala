@@ -10,7 +10,7 @@ import scala.swing.Separator
 import scala.swing.SimpleSwingApplication
 
 object Scaltris extends SimpleSwingApplication {
-  val boardPanel = new BoardPanel
+  val boardPanel = new TetrisPanel
 
   def top = new MainFrame {
     title = "Scaltris"

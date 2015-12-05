@@ -7,7 +7,7 @@ import scala.swing.Reactor
 import scala.swing.event.Key
 import scala.swing.event.KeyPressed
 
-class BoardController(val parent: BoardPanel) extends Reactor {
+class BoardController(val parent: TetrisPanel) extends Reactor {
 
   var board = new Board
   var currentTetromino = new Tetromino

@@ -9,11 +9,12 @@ import scala.swing.Dimension
 import scala.swing.Graphics2D
 import scala.swing.Panel
 
-class BoardPanel extends Panel {
+class TetrisPanel extends Panel {
   val controller = new BoardController(this)
   controller.listenTo(this.keys)
 
-  preferredSize = new Dimension(Block.BlockSize * Board.Width,
+  // The extra width is for the next tetromino and scores
+  preferredSize = new Dimension(Block.BlockSize * (Board.Width + 5),
                                 Block.BlockSize * Board.Height)
 
   override def paintComponent(g: Graphics2D) {
